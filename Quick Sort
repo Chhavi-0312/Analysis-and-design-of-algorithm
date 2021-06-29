@@ -1,0 +1,68 @@
+include <bits/stdc++.h>
+#include<chrono>
+using namespace std;
+void swap_function(int* x, int* y)
+{
+int temp = *x;
+ *x = *y;
+ *y = temp;
+}
+int Partition(int a[], int l, int h)
+{
+int pivot = a[l]; //selecting first element as pivot element
+int i = l+1, j = h; //initializing i and j
+while(i < j) 
+ {
+do
+ i++;
+while(a[i] < pivot);
+do
+ j--;
+while(a[j] > pivot);
+if(i < j)
+swap_function(&a[i], &a[j]);
+ }
+a[l] = a[j];
+a[j] = pivot;
+return j;
+}
+void QuickSort(int a[], int l, int h)
+{
+if(l < h)
+ {
+int P = Partition(a, l, h+1);
+QuickSort(a, l, P-1);
+QuickSort(a, P+1, h);
+ }
+}
+int main()
+{
+int i, j, n, key, t ,range1,range2,avg,step; cout<<"Enter range of number of elements"<<endl;
+ cin>>range1>>range2;
+ cout<<"Enter step size"<<endl;
+ cin>>step;
+ cout<<"enter average count"<<endl;
+ cin>>avg;
+srand(time(0));
+for(n=range1; n<=range2; n=n+step)
+ {
+ t=0;
+int a[n+1];
+for(i=0; i<avg; i++)
+ {
+for(j=0; j<n; j++)
+ {
+a[j]=(rand()%(n+50))+1;
+ }
+a[n] = n+100;
+ //sort(a,a+n);
+auto st = std::chrono::high_resolution_clock::now();
+QuickSort(a, 0, n-1);
+auto ends = std::chrono::high_resolution_clock::now();
+std::chrono::duration<double> elapsed = ends - st;
+ t=t+(elapsed.count()*1000000);
+ }
+ cout<<n<<"\t"<<t/avg<<"\n";
+ }
+return 0;
+}
